@@ -1,0 +1,88 @@
+<div *ngIf="!isLogged()" class="flex justify-center items-center h-screen text-center text-lg font-semibold text-gray-700">
+    Inicie sesión para poder ver el área de departamentos.
+</div>
+
+<div *ngIf="!editing && isLogged()" class="container mx-auto p-6">
+    <div class="flex justify-between items-center mb-6">
+        <h2 class="text-3xl font-bold text-gray-800">Lista de Departamentos</h2>
+        <button class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-5 rounded-lg transition-all"
+            (click)="adding=true; newDepartamento = {}; loadDepartamentos();">
+            + Agregar Departamento
+        </button>
+    </div>
+    
+    <div class="overflow-x-auto">
+        <table class="w-full border border-collapse table-auto shadow-md">
+            <thead>
+                <tr class="bg-blue-100 text-gray-700">
+                    <th class="border px-6 py-3 text-left font-medium uppercase tracking-wider">Código</th>
+                    <th class="border px-6 py-3 text-left font-medium uppercase tracking-wider">Área</th>
+                    <th class="border px-6 py-3 text-center font-medium uppercase tracking-wider">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let departamento of departamentos; index as i" class="border-b hover:bg-gray-50">
+                    <td class="border px-6 py-3">{{ departamento.codigo_departamento }}</td>
+                    <td class="border px-6 py-3">{{ departamento.nombre }}</td>
+                    <td class="border px-6 py-3 flex items-center justify-center space-x-2">
+                        <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-md transition-all"
+                            (click)="delete(departamento.nombre,departamento.codigo_departamento)">
+                            🗑 Delete
+                        </button>
+                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md transition-all"
+                            (click)="editing=true; currentDepartamento=departamento; loadDepartamentos();">
+                            ✏ Edit
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Sección de Edición -->
+<div *ngIf="editing" class="container mx-auto p-6">
+    <div class="bg-white p-6 rounded-lg shadow-md">
+        <h2 class="text-2xl font-bold text-gray-800 mb-4">Editando: {{ currentDepartamento.nombre }}</h2>
+        
+        <label class="block text-gray-700 font-bold mb-2">Nombre</label>
+        <input [(ngModel)]="currentDepartamento.nombre"
+            class="w-full border rounded-lg py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400">
+        
+        <div class="flex justify-end mt-4 space-x-2">
+            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md transition-all" (click)="update()">
+                ✔ Aceptar
+            </button>
+            <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-md transition-all" 
+                (click)="editing=false; currentDepartamento = {}">
+                ❌ Cancelar
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Sección de Agregar -->
+<div *ngIf="adding" class="container mx-auto p-6">
+    <div class="bg-white p-6 rounded-lg shadow-md">
+        <h2 class="text-2xl font-bold text-gray-800 mb-4">Agregar Departamento</h2>
+        
+        <label class="block text-gray-700 font-bold mb-2">Nombre</label>
+        <input [(ngModel)]="newDepartamento.nombre"
+            class="w-full border rounded-lg py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-400"
+            placeholder="Nombre del departamento">
+        
+        <label class="block text-gray-700 font-bold mb-2 mt-4">Código</label>
+        <input [(ngModel)]="newDepartamento.codigo_departamento"
+            class="w-full border rounded-lg py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-400"
+            placeholder="Código del departamento">
+        
+        <div class="flex justify-end mt-4 space-x-2">
+            <button class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-md transition-all" (click)="addDepartamento()">
+                ➕ Agregar
+            </button>
+            <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-md transition-all" (click)="adding=false; newDepartamento = {}">
+                ❌ Cancelar
+            </button>
+        </div>
+    </div>
+</div>
